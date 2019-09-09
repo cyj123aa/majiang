@@ -2,31 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Bootstrap 实例 - 基本的表格</title>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
-<table class="table">
-  <caption>基本的表格布局</caption>
-  <thead>
-  <tr>
-    <th>名称</th>
-    <th>城市</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>Tanmay</td>
-    <td>Bangalore</td>
-  </tr>
-  <tr>
-    <td>Sachin</td>
-    <td>Mumbai</td>
-  </tr>
-  </tbody>
-</table>
+  <title>麻将总战绩</title>
+  <!-- 引入bootstrap样式 -->
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- 引入bootstrap-table样式 -->
+  <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+
+  <!-- jquery及bootstrapjs -->
+  <script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <!-- bootstrap-table.min.js -->
+  <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
+  <!-- 引入中文语言包 -->
+  <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+</head>
+
+<body>
+麻将总战绩
+<table id="example" border="1">
+</table>
 </body>
+
+
+<script>
+  initData();
+  function initData(){
+
+    $('#example').bootstrapTable({
+      url: '/demoView/getList',
+      method: 'post',
+      striped: true,
+      columns: [
+        {
+          field: 'name',
+          title: '名字'
+        },
+        {
+          field: 'maJiang',
+          title: '麻将'
+        },
+        {
+          field: 'redEnvelope',
+          title: '红包'
+        },
+        {
+          field: 'total',
+          title: '总计'
+        }
+      ]
+    });
+  }
+
+</script>
+
+
 </html>

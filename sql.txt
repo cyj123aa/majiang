@@ -1,0 +1,69 @@
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名字',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+DROP TABLE IF EXISTS `real_time_game`;
+CREATE TABLE `real_time_game`  (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `rent` int(4) NOT NULL COMMENT '每局上缴台版',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+DROP TABLE IF EXISTS `mj_history`;
+CREATE TABLE `mj_history`  (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `red_envelope` int(4) NOT NULL COMMENT '红包总数',
+  `rent` int(4) NOT NULL COMMENT '支付台版',
+  `date_time` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '日期',
+  `all_rent` int(4) NOT NULL COMMENT '台版总数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+DROP TABLE IF EXISTS `middle_real_time_game`;
+CREATE TABLE `middle_real_time_game`  (
+  `id` bigint(32) NOT NULL,
+  `game_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '关联每一句的局号',
+  `user_id` bigint(32) NOT NULL COMMENT '用户id',
+  `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名字',
+  `majiang` int(4) NOT NULL COMMENT '当局数据',
+  `rent` int(4) NOT NULL COMMENT '每一句上缴台版',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
+DROP TABLE IF EXISTS `middle_mj_history`;
+CREATE TABLE `middle_mj_history`  (
+  `id` bigint(32) NOT NULL,
+  `user_id` bigint(32) NOT NULL COMMENT '用户id',
+  `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名字',
+  `red_envelope` int(4) NOT NULL COMMENT '用户当日抢到的红包数量',
+  `majiang` int(4) NOT NULL COMMENT '用户当日的麻将输赢',
+  `history_id` bigint(32) NOT NULL COMMENT '关联麻将历史表的id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+

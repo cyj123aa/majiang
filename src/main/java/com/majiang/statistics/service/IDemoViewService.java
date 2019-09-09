@@ -2,7 +2,7 @@ package com.majiang.statistics.service;
 
 /**
  * @author chenyuejun
- * @descripption
+ * @descripption demo
  * @date 2019/9/9 &{TIME}
  */
 public interface IDemoViewService {
