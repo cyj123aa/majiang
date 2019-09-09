@@ -1,13 +1,13 @@
-package com.majiang.statistics.statistics;
+package com.majiang.statistics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StatisticsStatisticsApplication {
+public class StatisticsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StatisticsStatisticsApplication.class, args);
+        SpringApplication.run(StatisticsApplication.class, args);
     }
 
 }
