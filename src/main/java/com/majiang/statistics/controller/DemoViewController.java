@@ -34,9 +34,46 @@ public class DemoViewController {
         return "index.html";
     }
 
+    @RequestMapping("/entry")
+    public String entry(Model model) {
+        return "entry.html";
+    }
+
     @PostMapping("/getList")
     @ResponseBody
     public List<User> getList(){
+        System.out.println("come getList");
+        // mock 数据
+        List<User> users=new ArrayList<>();
+        User cyj=new User();
+        cyj.setMaJiang(100);
+        cyj.setName("陈岳军");
+        cyj.setRedEnvelope(30);
+        cyj.setTotal(100+30);
+
+        User rwg=new User();
+        rwg.setMaJiang(200);
+        rwg.setName("任炜刚");
+        rwg.setRedEnvelope(20);
+        rwg.setTotal(200+20);
+
+        User cjb=new User();
+        cjb.setMaJiang(300);
+        cjb.setName("陈加倍");
+        cjb.setRedEnvelope(30);
+        cjb.setTotal(200+30);
+
+        users.add(cyj);
+        users.add(rwg);
+        users.add(cjb);
+        return users;
+    }
+
+
+
+    @PostMapping("/getList2")
+    @ResponseBody
+    public List<User> getList2(){
         System.out.println("come getList");
         // mock 数据
         List<User> users=new ArrayList<>();
