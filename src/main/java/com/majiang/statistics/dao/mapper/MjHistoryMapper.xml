@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.majiang.statistics.dao.mapper.MjHistoryMapper">
+
+    <resultMap id="mjHistoryMap"
+               type="com.majiang.statistics.dao.model.MjHistoryBO">
+        <result column="user_name" property="name"/>
+        <result column="red_envelope" property="redEnvelope"/>
+        <result column="majiang" property="majiang"/>
+        <result column="date_time" property="data"/>
+        <result column="history_id" property="historyId"/>
+        <result column="user_id"  property="userId"/>
+    </resultMap>
+
+
+    <select id="getRecord" resultMap="mjHistoryMap">
+    select  user_name,mmh.red_envelope,majiang,mh.date_time,mmh.history_id,user_id
+    from middle_mj_history mmh
+    left join mj_history mh on mmh.history_id = mh.id
+     ORDER BY
+        date_time asc
+</select>
+
+</mapper>

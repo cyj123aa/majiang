@@ -1,5 +1,7 @@
 package com.majiang.statistics.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.majiang.statistics.dao.model.User;
 import com.majiang.statistics.service.IDemoViewService;
 import java.util.ArrayList;
@@ -37,6 +39,46 @@ public class DemoViewController {
     @RequestMapping("/entry")
     public String entry(Model model) {
         return "entry.html";
+    }
+
+    @RequestMapping("/excel")
+    public String excel(Model model) {
+        return "excel.html";
+    }
+
+
+    @RequestMapping("/tu")
+    public String tu(Model model) {
+        List aa=new ArrayList<>();
+        aa.add("陈岳军");
+        aa.add("任炜刚");
+        aa.add("陈加倍");
+        aa.add("钱江松");
+        aa.add("孙灿杰");
+        String jsonToArray = JSONObject.toJSONString(aa);
+        JSONArray js=JSONObject.parseArray(jsonToArray);
+
+        List dataAll=new ArrayList<>();
+        dataAll.add(124);
+        dataAll.add(-1234);
+        dataAll.add(-161);
+        dataAll.add(80);
+        dataAll.add(-410);
+
+
+        List dataAverage=new ArrayList<>();
+        dataAverage.add(124/4);
+        dataAverage.add(-1234/5);
+        dataAverage.add(-161/4);
+        dataAverage.add(80/5);
+        dataAverage.add(-410/3);
+
+        model.addAttribute("tuName", js);
+        model.addAttribute("dataAll", JSONObject.parseArray(JSONObject.toJSONString(dataAll)));
+        model.addAttribute("dataAverage", JSONObject.parseArray(JSONObject.toJSONString(dataAverage)));
+
+
+        return "data.html";
     }
 
     @PostMapping("/getList")

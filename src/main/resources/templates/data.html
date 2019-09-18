@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <script   src="/js/echarts.min.js"></script>
+
+  <style>
+    .all{background: red;float: left;}
+    .average{background: green;float:right;}
+  </style>
+</head>
+<body>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+<div id="all" style="width: 600px;height:400px;float:left;"></div>
+<div id="average" style="width: 600px;height:400px;float:left;"></div>
+  <div id="allRed" style="width: 600px;height:400px;float:left;"></div>
+  <div id="averageRed" style="width: 600px;height:400px;float:left;"></div>
+
+<div id="box" style="width: 1000px; height:500px; "></div>
+
+<script type="text/javascript" th:inline="javascript">
+//麻将总数据图
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('all'));
+  var tuName = [[${tuName}]];
+  var tuData = [[${dataAll}]];
+  //let tuName = ['a', 'b'];
+  // 指定图表的配置项和数据
+
+  var option = {
+    title: {
+      text: '麻将总数据'
+    },
+    tooltip: {},
+    legend: {
+      data:['rmb/元']
+    },
+    xAxis: {
+      data: tuName
+    },
+    yAxis: {},
+    series: [{
+      name: 'rmb/元',
+      type: 'bar',
+      data: tuData,
+      barWidth: '60%',
+      itemStyle: {
+        //通常情况下：
+        normal: {
+          label: {
+            show: true, //开启显示
+            position: 'top', //"left", "top", "right" 以及 "bottom"
+            textStyle: { //数值样式
+              color: 'black',
+              fontSize: 14
+            }
+          },
+          //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+          color: function (params) {
+            if(params.value > 1){
+              return '#f67287';
+            }else{
+              return '#65d186';
+            }
+          }
+        },
+//鼠标悬停时：
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        },
+      }
+    }]
+  };
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+
+
+
+
+
+
+
+//麻将场均图
+var average = echarts.init(document.getElementById('average'));
+var dataAverage = [[${dataAverage}]];
+//let tuName = ['a', 'b'];
+// 指定图表的配置项和数据
+
+var averageOption = {
+  color: ['#3bcec6'],
+  title: {
+    text: '麻将场均数据'
+  },
+  tooltip: {},
+  legend: {
+    data:['rmb/元']
+  },
+  xAxis: {
+    data: tuName
+  },
+  yAxis: {},
+  series: [{
+    name: 'rmb/元',
+    type: 'bar',
+    data: dataAverage,
+    barWidth: '60%',
+    itemStyle: {
+      //通常情况下：
+      normal: {
+
+        label: {
+          show: true, //开启显示
+          position: 'top', //"left", "top", "right" 以及 "bottom"
+          textStyle: { //数值样式
+            color: 'black',
+            fontSize: 14
+          }
+        },
+        //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+        color: function (params) {
+        if(params.value > 1){
+          return '#f67287';
+        }else{
+          return '#65d186';
+        }
+
+        }
+      },
+//鼠标悬停时：
+      emphasis: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+      },
+    }
+  }]
+};
+// 使用刚指定的配置项和数据显示图表。
+average.setOption(averageOption);
+
+
+
+//麻将带红包总图
+var allRed = echarts.init(document.getElementById('allRed'));
+var dataAllRed = [[${dataAllRed}]];
+//let tuName = ['a', 'b'];
+// 指定图表的配置项和数据
+
+var allRedOption = {
+  color: ['#3bcec6'],
+  title: {
+    text: '麻将带红包总数据'
+  },
+  tooltip: {},
+  legend: {
+    data:['rmb/元']
+  },
+  xAxis: {
+    data: tuName
+  },
+  yAxis: {},
+  series: [{
+    name: 'rmb/元',
+    type: 'bar',
+    data: dataAllRed,
+    barWidth: '60%',
+    itemStyle: {
+      //通常情况下：
+      normal: {
+
+        label: {
+          show: true, //开启显示
+          position: 'top', //"left", "top", "right" 以及 "bottom"
+          textStyle: { //数值样式
+            color: 'black',
+            fontSize: 14
+          }
+        },
+        //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+        color: function (params) {
+          if(params.value > 1){
+            return '#f67287';
+          }else{
+            return '#65d186';
+          }
+
+        }
+      },
+//鼠标悬停时：
+      emphasis: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+      },
+    }
+  }]
+};
+// 使用刚指定的配置项和数据显示图表。
+allRed.setOption(allRedOption);
+
+
+
+
+
+//麻将带红包场均图
+var averageRed = echarts.init(document.getElementById('averageRed'));
+var dataAverageRed = [[${dataAverageRed}]];
+//let tuName = ['a', 'b'];
+// 指定图表的配置项和数据
+
+var averageRedOption = {
+  color: ['#3bcec6'],
+  title: {
+    text: '麻将带红包场均数据'
+  },
+  tooltip: {},
+  legend: {
+    data:['rmb/元']
+  },
+  xAxis: {
+    data: tuName
+  },
+  yAxis: {},
+  series: [{
+    name: 'rmb/元',
+    type: 'bar',
+    data: dataAverageRed,
+    barWidth: '60%',
+    itemStyle: {
+      //通常情况下：
+      normal: {
+
+        label: {
+          show: true, //开启显示
+          position: 'top', //"left", "top", "right" 以及 "bottom"
+          textStyle: { //数值样式
+            color: 'black',
+            fontSize: 14
+          }
+        },
+        //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+        color: function (params) {
+          if(params.value > 1){
+            return '#f67287';
+          }else{
+            return '#65d186';
+          }
+
+        }
+      },
+//鼠标悬停时：
+      emphasis: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+      },
+    }
+  }]
+};
+// 使用刚指定的配置项和数据显示图表。
+averageRed.setOption(averageRedOption);
+
+
+//折线图
+
+var myChart = echarts.init(document.getElementById("box"));
+
+
+var echarts=[[${echarts}]];
+
+
+
+var series=echarts.series;
+
+
+// option 里面的内容基本涵盖你要画的图表的所有内容
+var option = {
+  // 定义样式和数据
+  backgroundColor: '#FBFBFB',
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    data: echarts.legend
+  },
+
+  calculable: true,
+
+
+  xAxis: [{
+    axisLabel: {
+      rotate: 30,
+      interval: 0
+    },
+    axisLine: {
+      lineStyle: {
+        color: 'red'
+      }
+    },
+    type: 'category',
+    boundaryGap: false,
+    data: echarts.axis
+  }],
+  yAxis: [{
+
+    type: 'value',
+    axisLine: {
+      lineStyle: {
+        color: '#CECECE'
+      }
+    }
+  }],
+  series: series
+};
+
+
+// 一定不要忘了这个，具体是干啥的我忘了，官网是这样写的使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+</script>
+
+</body>
+</html>
