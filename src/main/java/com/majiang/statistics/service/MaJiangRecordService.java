@@ -1,5 +1,6 @@
 package com.majiang.statistics.service;
 
+import com.majiang.statistics.dao.model.TrainData;
 import org.springframework.ui.Model;
 
 /**
@@ -16,7 +17,9 @@ public interface MaJiangRecordService {
     void  setModel(Model model);
 
 
+   String trainData(TrainData trainData);
 
 
+   void insertTrainData(TrainData trainData);
 
 }
