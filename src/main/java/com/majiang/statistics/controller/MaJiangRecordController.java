@@ -32,8 +32,6 @@ public class MaJiangRecordController {
     @RequestMapping("/record")
     public String tu(Model model) {
 
-
-
         maJiangRecordService.setModel(model);
 
         return "data.html";
@@ -42,8 +40,6 @@ public class MaJiangRecordController {
 
     @RequestMapping("/fetch")
     public String fetch(Model model) {
-
-
 
        // maJiangRecordService.setModel(model);
 
