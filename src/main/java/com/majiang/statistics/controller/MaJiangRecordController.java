@@ -27,7 +27,13 @@ public class MaJiangRecordController {
     @Autowired
     MaJiangRecordService maJiangRecordService;
 
+    @RequestMapping("/index")
+    public String index(Model model) {
 
+        // maJiangRecordService.setModel(model);
+
+        return "index.html";
+    }
 
     @RequestMapping("/record")
     public String tu(Model model) {
