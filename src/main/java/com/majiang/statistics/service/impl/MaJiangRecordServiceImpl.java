@@ -2,6 +2,7 @@ package com.majiang.statistics.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.majiang.statistics.BO.VueData;
 import com.majiang.statistics.dao.mapper.MjHistoryMapper;
 import com.majiang.statistics.dao.mapper.TrainDataMapper;
 import com.majiang.statistics.dao.model.Echarts;
@@ -62,7 +63,64 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
         setLineChart(mjHistoryBOS, groupBy, names, model);
     }
 
+    @Override
+    public VueData vueData(){
+        VueData vueData=new VueData();
+        List names = new ArrayList<>();
 
+        List<MjHistoryBO> mjHistoryBOS = mjHistoryMapper.getRecord();
+        //根据名字分组
+        log.info("mjHistoryBOS={}", mjHistoryBOS);
+
+        Map<String, List<MjHistoryBO>> groupBy = mjHistoryBOS.stream().collect(Collectors.groupingBy(MjHistoryBO::getName));
+
+        // 总盈亏的集合--总盈亏柱状图
+        List recordAll = new ArrayList<>();
+        // 平均盈亏的集合--平均盈亏列表柱状图
+        List recordAverage = new ArrayList<>();
+        // 总盈亏的集合--总盈亏带红包柱状图
+        List recordAllRed = new ArrayList<>();
+        // 平均盈亏的集合--平均盈亏带红包柱状图
+        List recordAverageRed = new ArrayList<>();
+        //便利map
+        for (Map.Entry<String, List<MjHistoryBO>> entry : groupBy.entrySet()) {
+            names.add(entry.getKey());
+            recordAll.add(sumByListMj(entry.getValue()));
+            recordAverage.add(avgByListMj(entry.getValue()));
+            recordAllRed.add(sumByListMjHaveRed(entry.getValue()));
+            recordAverageRed.add(avgByListMjHaveRed(entry.getValue()));
+        }
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> axis = new ArrayList<>();
+        // 把mjHistoryBOS 根据 次数id分组
+        TreeMap<Long, List<MjHistoryBO>> groupById = mjHistoryBOS.stream()
+            .collect(Collectors.groupingBy(MjHistoryBO::getHistoryId, TreeMap::new, Collectors.toList()));
+        //便利map
+
+        //累计数据
+        List<Series> seriesSum = new ArrayList<>();
+        //累计数据
+        List<Series> series = new ArrayList<>();
+
+        //主场次id 集合
+        List<Long> historyId = new ArrayList<>();
+        for (Map.Entry<Long, List<MjHistoryBO>> entry : groupById.entrySet()) {
+            //找到每一场的时间，作为表格的x坐标
+            if (!CollectionUtils.isEmpty(entry.getValue())) {
+                axis.add(df.format(entry.getValue().get(0).getData()));
+            }
+            //找到每一场的id  用来寻找 某些人不参与的比赛，归零处理。
+            historyId.add(entry.getKey());
+        }
+
+        // series 线数据封装
+        getSeries(series, seriesSum, groupBy, historyId);
+        vueData.setSeries(seriesSum);
+        vueData.setTuName(names);
+        vueData.setTime(axis);
+        return vueData;
+    }
     @Override
     public String trainData(TrainData trainData) {
 

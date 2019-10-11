@@ -1,13 +1,8 @@
 package com.majiang.statistics.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.majiang.statistics.dao.model.Message;
 import com.majiang.statistics.dao.model.TrainData;
-import com.majiang.statistics.dao.model.User;
 import com.majiang.statistics.service.MaJiangRecordService;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +27,7 @@ public class MaJiangRecordController {
 
         // maJiangRecordService.setModel(model);
 
-        return "index.html";
+        return "index2.html";
     }
 
     @RequestMapping("/record")

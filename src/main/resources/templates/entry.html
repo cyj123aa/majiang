@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" >
   <title>录入</title>
   <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,25 +33,21 @@
 
 
 </body>
-<script>
+<script type="text/javascript" th:inline="javascript">
   var t = $('#table');
   t.innerHTML = "<tr><td>数据</td></tr>";
-
-  let i=3;
+  var rows = [[${rows}]];
+  var i=3;
   $(function() {
-    let $table = $('#table');
-    let $button = $('#button');
-    let $getTableData = $('#getTableData');
+    var $table = $('#table');
+    var $button = $('#button');
+    var $getTableData = $('#getTableData');
 
     $button.click(function() {
       $table.bootstrapTable('append', {
-        index: 0,
-        row: {
-          id: '',
-          name: '',
-          price: ''
-        }
+
       });
+
     });
 
     $table.bootstrapTable({
@@ -65,35 +61,7 @@
       showPaginationSwitch: true,     //显示切换分页按钮
       showRefresh: true,      //显示刷新按钮
       //clickToSelect: true,  //点击row选中radio或CheckBox
-      columns: [{
-        checkbox: true
-      }, {
-        field: 'index',
-        title: '局数',
-        formatter: function(value, row, index) {
-          return  index;
-        }
-      }, {
-        field: 'C1',
-        title: '玩家1',
-        editable: {
-          type: 'select',
-          title: '测试',
-          source: [{ value: "YuXi", text: "YuXi" }, { value: "钰玺博客", text: "钰玺博客" }, { value: "YuXi-钰玺博客", text: "YuXi-钰玺博客" }]
-        }
-      }, {
-        field: 'name2',
-        title: '玩家2'
-      },{
-        field: 'name3',
-        title: '玩家3'
-      },{
-        field: 'name4',
-        title: '玩家4'
-      },{
-        field: 'rent',
-        title: '台版'
-      } ],
+      columns: rows,
       /**
        * @param {点击列的 field 名称} field
        * @param {点击列的 value 值} value
@@ -103,13 +71,13 @@
       onClickCell: function(field, value, row, $element) {
         $element.attr('contenteditable', true);
         $element.blur(function() {
-          let index = $element.parent().data('index');
-          let tdValue = $element.html();
+          var index = $element.parent().data('index');
+          var tdValue = $element.html();
 
           saveData(index, field, tdValue);
         })
       }
-      });
+    });
 
 
   $getTableData.click(function() {

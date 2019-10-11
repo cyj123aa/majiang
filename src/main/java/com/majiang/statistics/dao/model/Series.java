@@ -26,13 +26,16 @@ public class Series {
     /**
      * 线的样式
      */
-    private ItemStyle itemStyle;
+    private Integer yAxisIndex;
+
+    private  MarkPoint   markPoint;
 
     public Series(String name, String type, List<Integer> data) {
         this.name = name;
         this.type = type;
         this.data = data;
-        this.itemStyle = new ItemStyle();
+        this.yAxisIndex = 1;
+        this. markPoint=new MarkPoint();
     }
 
 

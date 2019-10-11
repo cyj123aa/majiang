@@ -1,5 +1,6 @@
 package com.majiang.statistics.service;
 
+import com.majiang.statistics.BO.VueData;
 import com.majiang.statistics.dao.model.TrainData;
 import org.springframework.ui.Model;
 
@@ -21,5 +22,7 @@ public interface MaJiangRecordService {
 
 
    void insertTrainData(TrainData trainData);
+
+    VueData vueData();
 
 }

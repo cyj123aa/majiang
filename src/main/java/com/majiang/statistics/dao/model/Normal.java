@@ -10,9 +10,4 @@ import lombok.Data;
 @Data
 public class Normal {
 
-    private Label label;
-
-    public Normal() {
-        this.label = new Label(true);
-    }
 }

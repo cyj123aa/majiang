@@ -2,11 +2,11 @@ package com.majiang.statistics.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.majiang.statistics.BO.Row;
 import com.majiang.statistics.dao.model.User;
 import com.majiang.statistics.service.IDemoViewService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,11 +33,29 @@ public class DemoViewController {
 
     @RequestMapping("/index")
     public String index(Model model) {
-        return "index.html";
+        return "index2.html";
     }
 
     @RequestMapping("/entry")
     public String entry(Model model) {
+        List<Row> rows =new ArrayList<>();
+        Row r1=new Row("cyj","陈岳军");
+        Row r2=new Row("rwg","任炜刚");
+        Row r3=new Row("cjb","陈加倍");
+        Row r4=new Row("qs","钱松");
+        Row r5=new Row("scj","孙灿杰");
+        Row r6=new Row("tb","台版");
+
+
+        rows.add(r1);
+        rows.add(r2);
+        rows.add(r3);
+        rows.add(r4);
+        rows.add(r5);
+        rows.add(r6);
+        String jsonToArray = JSONObject.toJSONString(rows);
+        JSONArray jsonArray = JSONObject.parseArray(jsonToArray);
+        model.addAttribute("rows", jsonArray);
         return "entry.html";
     }
 
@@ -113,33 +131,4 @@ public class DemoViewController {
 
 
 
-    @PostMapping("/getList2")
-    @ResponseBody
-    public List<User> getList2(){
-        System.out.println("come getList");
-        // mock 数据
-        List<User> users=new ArrayList<>();
-        User cyj=new User();
-        cyj.setMaJiang(100);
-        cyj.setName("陈岳军");
-        cyj.setRedEnvelope(30);
-        cyj.setTotal(100+30);
-
-        User rwg=new User();
-        rwg.setMaJiang(200);
-        rwg.setName("任炜刚");
-        rwg.setRedEnvelope(20);
-        rwg.setTotal(200+20);
-
-        User cjb=new User();
-        cjb.setMaJiang(300);
-        cjb.setName("陈加倍");
-        cjb.setRedEnvelope(30);
-        cjb.setTotal(200+30);
-
-        users.add(cyj);
-        users.add(rwg);
-        users.add(cjb);
-        return users;
-    }
 }
