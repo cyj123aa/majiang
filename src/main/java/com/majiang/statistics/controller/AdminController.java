@@ -6,11 +6,7 @@ import com.majiang.statistics.BO.VueData;
 import com.majiang.statistics.service.MaJiangRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author chenyuejun
@@ -23,6 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AdminController {
     @Autowired
     MaJiangRecordService maJiangRecordService;
+
+    @GetMapping("info")
+    @ResponseBody
+    public Object getInfo() {
+        SignOut signOut = new SignOut();
+        signOut.setStatus(1);
+        return signOut;
+    }
 
 
     @PostMapping("/signOut")
