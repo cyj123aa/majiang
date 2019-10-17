@@ -183,16 +183,12 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
 
     @Override
     public List<LabelBO> getUser(){
-
-
         return userMapper.getUsers();
     }
 
 
     @Override
     public List<TableLableBO>   getTable(){
-
-
         return userMapper.getTable();
     }
     @Override

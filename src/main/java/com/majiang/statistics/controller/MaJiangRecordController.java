@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/mj")
 public class MaJiangRecordController {
+
     @Autowired
     MaJiangRecordService maJiangRecordService;
 
@@ -42,7 +43,7 @@ public class MaJiangRecordController {
     @RequestMapping("/fetch")
     public String fetch(Model model) {
 
-       // maJiangRecordService.setModel(model);
+        // maJiangRecordService.setModel(model);
 
         return "fetch.html";
     }
@@ -51,18 +52,18 @@ public class MaJiangRecordController {
     @PostMapping("/trainData")
     @ResponseBody
     public Message trainData(@RequestBody TrainData trainData) {
-        Message message=new Message();
+        Message message = new Message();
         message.setMsg(maJiangRecordService.trainData(trainData));
-        return  message;
+        return message;
     }
 
     @PostMapping("/insertTrainData")
     @ResponseBody
     public Message insertTrainData(@RequestBody TrainData trainData) {
 
-        Message message=new Message();
+        Message message = new Message();
         maJiangRecordService.insertTrainData(trainData);
         message.setMsg("入库成功");
-        return  message;
+        return message;
     }
 }
