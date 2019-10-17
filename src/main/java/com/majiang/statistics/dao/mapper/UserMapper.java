@@ -1,10 +1,8 @@
 package com.majiang.statistics.dao.mapper;
 
-import com.majiang.statistics.BO.LabelBO;
-import com.majiang.statistics.BO.TableLableBO;
-import com.majiang.statistics.dao.model.MjHistoryBO;
+import com.majiang.statistics.vo.LabelBO;
+import com.majiang.statistics.vo.TableLableBO;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author: chenyuejun

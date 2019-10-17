@@ -3,12 +3,12 @@
 <mapper namespace="com.majiang.statistics.dao.mapper.UserMapper">
 
   <resultMap id="labelMap"
-    type="com.majiang.statistics.BO.LabelBO">
+    type="com.majiang.statistics.vo.LabelBO">
     <result column="name" property="label"/>
     <result column="id" property="value"/>
   </resultMap>
   <resultMap id="tableMap"
-    type="com.majiang.statistics.BO.TableLableBO">
+    type="com.majiang.statistics.vo.TableLableBO">
     <result column="name" property="title"/>
     <result column="field" property="key"/>
   </resultMap>
