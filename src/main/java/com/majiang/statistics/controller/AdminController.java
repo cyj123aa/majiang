@@ -1,20 +1,10 @@
 package com.majiang.statistics.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.majiang.statistics.BO.BaseBO;
-import com.majiang.statistics.BO.LabelBO;
-import com.majiang.statistics.BO.TableLableBO;
-import com.majiang.statistics.BO.UserBO;
-import com.majiang.statistics.BO.VueData;
+import com.majiang.statistics.BO.*;
 import com.majiang.statistics.service.MaJiangRecordService;
-import java.util.List;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author chenyuejun
@@ -53,7 +45,7 @@ public class AdminController {
         System.out.println(userBO.getPassWord() + "-------" + userBO.getUserName());
         BaseBO baseBO = new BaseBO();
         baseBO.setStatus(1);
-       // baseBO.setMessage("登录成功");
+        // baseBO.setMessage("登录成功");
 
         // 从SecurityUtils里边创建一个 subject
         Subject subject = SecurityUtils.getSubject();
@@ -82,13 +74,14 @@ public class AdminController {
         return baseBO;
     }
 
-   // @RequiresPermissions("user:show")
+    // @RequiresPermissions("user:show")
     @PostMapping("/vueData")
     @ResponseBody
     public VueData vueData() {
         return maJiangRecordService.vueData();
     }
-  //  @RequiresPermissions("user:admin")
+
+    //  @RequiresPermissions("user:admin")
     @PostMapping("/vueData2")
     @ResponseBody
     public VueData vueData2() {
@@ -99,12 +92,12 @@ public class AdminController {
     @PostMapping("/installDay")
     @ResponseBody
     public BaseBO installDay() {
-        Long id=  maJiangRecordService.installDay();
-        System.out.println("id"+id);
-        BaseBO baseBO=new BaseBO();
+        Long id = maJiangRecordService.installDay();
+        System.out.println("id" + id);
+        BaseBO baseBO = new BaseBO();
         baseBO.setStatus(1);
         baseBO.setMessage("插入成功");
-         return  baseBO;
+        return baseBO;
     }
 
 
@@ -112,7 +105,7 @@ public class AdminController {
     @ResponseBody
     public List<LabelBO> getUser() {
 
-        return  maJiangRecordService.getUser();
+        return maJiangRecordService.getUser();
     }
 
 
@@ -120,7 +113,7 @@ public class AdminController {
     @ResponseBody
     public List<TableLableBO> getTable() {
 
-        return  maJiangRecordService.getTable();
+        return maJiangRecordService.getTable();
     }
 
 
@@ -128,7 +121,7 @@ public class AdminController {
     @ResponseBody
     public JSONArray getTableData() {
 
-        return  maJiangRecordService.getTableData();
+        return maJiangRecordService.getTableData();
     }
 
 }
