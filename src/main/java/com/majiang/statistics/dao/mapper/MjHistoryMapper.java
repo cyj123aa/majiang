@@ -1,8 +1,7 @@
 package com.majiang.statistics.dao.mapper;
 
-import com.majiang.statistics.dao.model.MjHistoryBO;
+import com.majiang.statistics.dao.model.MiddleMjHistoryBO;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
 /**
  * @Author: chenyuejun
@@ -12,5 +11,7 @@ import org.springframework.stereotype.Component;
 public interface MjHistoryMapper {
 
 
-   List<MjHistoryBO> getRecord();
+   List<MiddleMjHistoryBO> getRecord();
+
+
 }

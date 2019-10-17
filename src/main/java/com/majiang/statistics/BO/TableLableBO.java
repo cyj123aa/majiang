@@ -5,11 +5,10 @@ import lombok.Data;
 /**
  * @author chenyuejun
  * @descripption
- * @date 2019/9/25 &{TIME}
+ * @date 2019/10/15 &{TIME}
  */
 @Data
-public class SignOut {
-    private Integer status;
-    private String message;
-
+public class TableLableBO {
+private String title;
+    private String key;
 }

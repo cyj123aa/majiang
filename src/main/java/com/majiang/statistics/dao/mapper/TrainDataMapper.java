@@ -1,8 +1,6 @@
 package com.majiang.statistics.dao.mapper;
 
-import com.majiang.statistics.dao.model.MjHistoryBO;
 import com.majiang.statistics.dao.model.TrainData;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 /**

@@ -2,24 +2,26 @@ package com.majiang.statistics.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.majiang.statistics.BO.LabelBO;
+import com.majiang.statistics.BO.TableLableBO;
 import com.majiang.statistics.BO.VueData;
+import com.majiang.statistics.dao.mapper.MiddleMjHistoryMapper;
 import com.majiang.statistics.dao.mapper.MjHistoryMapper;
 import com.majiang.statistics.dao.mapper.TrainDataMapper;
+import com.majiang.statistics.dao.mapper.UserMapper;
 import com.majiang.statistics.dao.model.Echarts;
+import com.majiang.statistics.dao.model.MiddleMjHistoryBO;
 import com.majiang.statistics.dao.model.MjHistoryBO;
 import com.majiang.statistics.dao.model.Series;
 import com.majiang.statistics.dao.model.TrainData;
 import com.majiang.statistics.service.MaJiangRecordService;
 import com.majiang.statistics.util.Bayes;
 import com.majiang.statistics.util.FetchData;
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -45,22 +47,26 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
 
     @Resource
     private TrainDataMapper trainDataMapper;
+    @Resource
+    private MiddleMjHistoryMapper middleMjHistoryMapper;
 
+    @Resource
+    private UserMapper  userMapper;
     @Override
     public void setModel(Model model) {
         //名字的集合 --通用
         List names = new ArrayList<>();
 
-        List<MjHistoryBO> mjHistoryBOS = mjHistoryMapper.getRecord();
+        List<MiddleMjHistoryBO> middleMjHistoryBOS = mjHistoryMapper.getRecord();
         //根据名字分组
-        log.info("mjHistoryBOS={}", mjHistoryBOS);
+        log.info("middleMjHistoryBOS={}", middleMjHistoryBOS);
 
-        Map<String, List<MjHistoryBO>> groupBy = mjHistoryBOS.stream().collect(Collectors.groupingBy(MjHistoryBO::getName));
+        Map<String, List<MiddleMjHistoryBO>> groupBy = middleMjHistoryBOS.stream().collect(Collectors.groupingBy(MiddleMjHistoryBO::getName));
         //塞入柱状图需要的数据
         setHistogram(names, groupBy, model);
 
         //-------折线图
-        setLineChart(mjHistoryBOS, groupBy, names, model);
+        setLineChart(middleMjHistoryBOS, groupBy, names, model);
     }
 
     @Override
@@ -68,11 +74,11 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
         VueData vueData=new VueData();
         List names = new ArrayList<>();
 
-        List<MjHistoryBO> mjHistoryBOS = mjHistoryMapper.getRecord();
+        List<MiddleMjHistoryBO> middleMjHistoryBOS = mjHistoryMapper.getRecord();
         //根据名字分组
-        log.info("mjHistoryBOS={}", mjHistoryBOS);
+        log.info("middleMjHistoryBOS={}", middleMjHistoryBOS);
 
-        Map<String, List<MjHistoryBO>> groupBy = mjHistoryBOS.stream().collect(Collectors.groupingBy(MjHistoryBO::getName));
+        Map<String, List<MiddleMjHistoryBO>> groupBy = middleMjHistoryBOS.stream().collect(Collectors.groupingBy(MiddleMjHistoryBO::getName));
 
         // 总盈亏的集合--总盈亏柱状图
         List recordAll = new ArrayList<>();
@@ -83,7 +89,7 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
         // 平均盈亏的集合--平均盈亏带红包柱状图
         List recordAverageRed = new ArrayList<>();
         //便利map
-        for (Map.Entry<String, List<MjHistoryBO>> entry : groupBy.entrySet()) {
+        for (Map.Entry<String, List<MiddleMjHistoryBO>> entry : groupBy.entrySet()) {
             names.add(entry.getKey());
             recordAll.add(sumByListMj(entry.getValue()));
             recordAverage.add(avgByListMj(entry.getValue()));
@@ -94,8 +100,8 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<String> axis = new ArrayList<>();
         // 把mjHistoryBOS 根据 次数id分组
-        TreeMap<Long, List<MjHistoryBO>> groupById = mjHistoryBOS.stream()
-            .collect(Collectors.groupingBy(MjHistoryBO::getHistoryId, TreeMap::new, Collectors.toList()));
+        TreeMap<Long, List<MiddleMjHistoryBO>> groupById = middleMjHistoryBOS.stream()
+            .collect(Collectors.groupingBy(MiddleMjHistoryBO::getHistoryId, TreeMap::new, Collectors.toList()));
         //便利map
 
         //累计数据
@@ -105,7 +111,7 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
 
         //主场次id 集合
         List<Long> historyId = new ArrayList<>();
-        for (Map.Entry<Long, List<MjHistoryBO>> entry : groupById.entrySet()) {
+        for (Map.Entry<Long, List<MiddleMjHistoryBO>> entry : groupById.entrySet()) {
             //找到每一场的时间，作为表格的x坐标
             if (!CollectionUtils.isEmpty(entry.getValue())) {
                 axis.add(df.format(entry.getValue().get(0).getData()));
@@ -170,8 +176,49 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
         //输出结果
         return "根据判断，你今天的麻将要：" + ans;
     }
+    @Override
+    public  Long   installDay() {
+        return middleMjHistoryMapper.installDay(new MjHistoryBO());
+    }
+
+    @Override
+    public List<LabelBO> getUser(){
 
 
+        return userMapper.getUsers();
+    }
+
+
+    @Override
+    public List<TableLableBO>   getTable(){
+
+
+        return userMapper.getTable();
+    }
+    @Override
+    public JSONArray  getTableData(){
+        JSONArray jsonArray = new JSONArray();
+        List<MiddleMjHistoryBO> middleMjHistoryBOS = mjHistoryMapper.getRecord();
+        // 把mjHistoryBOS 根据 次数id分组
+        TreeMap<Long, List<MiddleMjHistoryBO>> groupById = middleMjHistoryBOS.stream()
+            .collect(Collectors.groupingBy(MiddleMjHistoryBO::getId, TreeMap::new, Collectors.toList()));
+
+        for (Map.Entry<Long, List<MiddleMjHistoryBO>> entry : groupById.entrySet()) {
+            JSONObject js=new JSONObject();
+
+                for (MiddleMjHistoryBO mi : entry.getValue()) {
+                    if(null==mi.getField()){
+                        js.put("tb",0);
+                    }else{
+                        js.put(mi.getField(),mi.getMajiang()+mi.getRedEnvelope());
+                    }
+                }
+
+            jsonArray.add(js);
+        }
+
+        return jsonArray;
+    }
 
     @Override
     public  void   insertTrainData(TrainData trainData){
@@ -181,7 +228,7 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
     /**
      * 填充柱状图需要的数据
      */
-    private void setHistogram(List names, Map<String, List<MjHistoryBO>> groupBy, Model model) {
+    private void setHistogram(List names, Map<String, List<MiddleMjHistoryBO>> groupBy, Model model) {
 
         // 总盈亏的集合--总盈亏柱状图
         List recordAll = new ArrayList<>();
@@ -192,7 +239,7 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
         // 平均盈亏的集合--平均盈亏带红包柱状图
         List recordAverageRed = new ArrayList<>();
         //便利map
-        for (Map.Entry<String, List<MjHistoryBO>> entry : groupBy.entrySet()) {
+        for (Map.Entry<String, List<MiddleMjHistoryBO>> entry : groupBy.entrySet()) {
             names.add(entry.getKey());
             recordAll.add(sumByListMj(entry.getValue()));
             recordAverage.add(avgByListMj(entry.getValue()));
@@ -211,18 +258,18 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
 
     /**
      *
-     * @param mjHistoryBOS
+     * @param middleMjHistoryBOS
      * @param groupBy
      * @param names
      * @param model
      */
-    private void setLineChart(List<MjHistoryBO> mjHistoryBOS, Map<String, List<MjHistoryBO>> groupBy, List names, Model model) {
+    private void setLineChart(List<MiddleMjHistoryBO> middleMjHistoryBOS, Map<String, List<MiddleMjHistoryBO>> groupBy, List names, Model model) {
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<String> axis = new ArrayList<>();
         // 把mjHistoryBOS 根据 次数id分组
-        TreeMap<Long, List<MjHistoryBO>> groupById = mjHistoryBOS.stream()
-            .collect(Collectors.groupingBy(MjHistoryBO::getHistoryId, TreeMap::new, Collectors.toList()));
+        TreeMap<Long, List<MiddleMjHistoryBO>> groupById = middleMjHistoryBOS.stream()
+            .collect(Collectors.groupingBy(MiddleMjHistoryBO::getHistoryId, TreeMap::new, Collectors.toList()));
         //便利map
 
         //数据
@@ -232,7 +279,7 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
 
         //主场次id 集合
         List<Long> historyId = new ArrayList<>();
-        for (Map.Entry<Long, List<MjHistoryBO>> entry : groupById.entrySet()) {
+        for (Map.Entry<Long, List<MiddleMjHistoryBO>> entry : groupById.entrySet()) {
             //找到每一场的时间，作为表格的x坐标
             if (CollectionUtils.isEmpty(entry.getValue())) {
                 axis.add(df.format(entry.getValue().get(0).getData()));
@@ -253,13 +300,13 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
     /**
      * 折线图每个线的数据封装  总数和每一局
      */
-    private void getSeries(List<Series> series, List<Series> seriesSum, Map<String, List<MjHistoryBO>> groupByName, List<Long> historyIds) {
+    private void getSeries(List<Series> series, List<Series> seriesSum, Map<String, List<MiddleMjHistoryBO>> groupByName, List<Long> historyIds) {
 
         //便利根据名字分组的集合
-        for (Map.Entry<String, List<MjHistoryBO>> entry : groupByName.entrySet()) {
+        for (Map.Entry<String, List<MiddleMjHistoryBO>> entry : groupByName.entrySet()) {
             //把集合里面的数据 tomap  场次为key
-            Map<Long, MjHistoryBO> groupByHistoryId = entry.getValue().stream()
-                .collect(Collectors.toMap(MjHistoryBO::getHistoryId, a -> a, (k1, k2) -> k1));
+            Map<Long, MiddleMjHistoryBO> groupByHistoryId = entry.getValue().stream()
+                .collect(Collectors.toMap(MiddleMjHistoryBO::getHistoryId, a -> a, (k1, k2) -> k1));
             //线上的数据
             List<Integer> data = new ArrayList<>();
             //线上的数据 可添加不同的list集合
@@ -270,13 +317,13 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
             int i = 0;
             //便利场次
             for (Long historyId : historyIds) {
-                MjHistoryBO mjHistoryBO = groupByHistoryId.get(historyId);
-                if (null != mjHistoryBO) {
+                MiddleMjHistoryBO middleMjHistoryBO = groupByHistoryId.get(historyId);
+                if (null != middleMjHistoryBO) {
                     //试试更新数据  加上红包的实时数据
-                    i = i + mjHistoryBO.getMajiang() + mjHistoryBO.getRedEnvelope();
+                    i = i + middleMjHistoryBO.getMajiang() + middleMjHistoryBO.getRedEnvelope();
                     //当天场次的数据，可控制加不加红包
-                    data.add(mjHistoryBO.getMajiang());
-                    winRate.add(mjHistoryBO.getMajiang());
+                    data.add(middleMjHistoryBO.getMajiang());
+                    winRate.add(middleMjHistoryBO.getMajiang());
                 } else {
                     //未参加当日场
                     data.add(0);
@@ -325,16 +372,16 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
     /**
      * 计算总和
      */
-    private Integer sumByListMj(List<MjHistoryBO> mjHistoryBOS) {
-        return mjHistoryBOS.stream().map(MjHistoryBO::getMajiang).reduce(0, Integer::sum);
+    private Integer sumByListMj(List<MiddleMjHistoryBO> middleMjHistoryBOS) {
+        return middleMjHistoryBOS.stream().map(MiddleMjHistoryBO::getMajiang).reduce(0, Integer::sum);
     }
 
     /**
      * 计算总和带红包
      */
-    private Integer sumByListMjHaveRed(List<MjHistoryBO> mjHistoryBOS) {
-        Integer sum = sumByListMj(mjHistoryBOS);
-        Integer red = mjHistoryBOS.stream().map(MjHistoryBO::getRedEnvelope).reduce(0, Integer::sum);
+    private Integer sumByListMjHaveRed(List<MiddleMjHistoryBO> middleMjHistoryBOS) {
+        Integer sum = sumByListMj(middleMjHistoryBOS);
+        Integer red = middleMjHistoryBOS.stream().map(MiddleMjHistoryBO::getRedEnvelope).reduce(0, Integer::sum);
 
         return sum + red;
     }
@@ -342,14 +389,14 @@ public class MaJiangRecordServiceImpl implements MaJiangRecordService {
     /**
      * 计算平均
      */
-    private Integer avgByListMj(List<MjHistoryBO> mjHistoryBOS) {
-        return sumByListMj(mjHistoryBOS) / mjHistoryBOS.size();
+    private Integer avgByListMj(List<MiddleMjHistoryBO> middleMjHistoryBOS) {
+        return sumByListMj(middleMjHistoryBOS) / middleMjHistoryBOS.size();
     }
 
     /**
      * 计算平均带红包
      */
-    private Integer avgByListMjHaveRed(List<MjHistoryBO> mjHistoryBOS) {
-        return sumByListMjHaveRed(mjHistoryBOS) / mjHistoryBOS.size();
+    private Integer avgByListMjHaveRed(List<MiddleMjHistoryBO> middleMjHistoryBOS) {
+        return sumByListMjHaveRed(middleMjHistoryBOS) / middleMjHistoryBOS.size();
     }
 }

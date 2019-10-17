@@ -1,12 +1,19 @@
 package com.majiang.statistics.controller;
 
-import com.majiang.statistics.BO.SignOut;
-import com.majiang.statistics.BO.UserBO;
-import com.majiang.statistics.BO.VueData;
+import com.alibaba.fastjson.JSONArray;
+import com.majiang.statistics.BO.*;
 import com.majiang.statistics.service.MaJiangRecordService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author chenyuejun
@@ -17,46 +24,104 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
     @Autowired
     MaJiangRecordService maJiangRecordService;
-
-    @GetMapping("info")
-    @ResponseBody
-    public Object getInfo() {
-        SignOut signOut = new SignOut();
-        signOut.setStatus(1);
-        return signOut;
-    }
 
 
     @PostMapping("/signOut")
     @ResponseBody
-    public SignOut signOut() {
-        SignOut signOut=new SignOut();
-        signOut.setStatus(1);
-        signOut.setMessage("退出成功");
-        return signOut;
+    public BaseBO signOut() {
+        BaseBO baseBO = new BaseBO();
+        baseBO.setStatus(1);
+        baseBO.setMessage("退出成功");
+        return baseBO;
 
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public SignOut login(@RequestBody UserBO userBO) {
-        System.out.println(userBO.getPassWord()+"-------"+userBO.getUserName());
-        SignOut signOut=new SignOut();
-        signOut.setStatus(1);
-        signOut.setMessage("登录成功");
-        return signOut;
+    public BaseBO login(@RequestBody UserBO userBO) {
+        System.out.println(userBO.getPassWord() + "-------" + userBO.getUserName());
+        BaseBO baseBO = new BaseBO();
+        baseBO.setStatus(1);
+        // baseBO.setMessage("登录成功");
 
+        // 从SecurityUtils里边创建一个 subject
+        Subject subject = SecurityUtils.getSubject();
+        // 在认证提交前准备 token（令牌）
+        UsernamePasswordToken token = new UsernamePasswordToken(userBO.getUserName(), userBO.getPassWord());
+        // 执行认证登陆
+        try {
+            subject.login(token);
+        } catch (UnknownAccountException uae) {
+            baseBO.setMessage("未知账户");
+        } catch (IncorrectCredentialsException ice) {
+            baseBO.setMessage("密码不正确");
+        } catch (LockedAccountException lae) {
+            baseBO.setMessage("账户已锁定");
+        } catch (ExcessiveAttemptsException eae) {
+            baseBO.setMessage("用户名或密码错误次数过多");
+        } catch (AuthenticationException ae) {
+            baseBO.setMessage("用户名或密码不正确！");
+        }
+        if (subject.isAuthenticated()) {
+            baseBO.setMessage("登录成功");
+        } else {
+            token.clear();
+            baseBO.setMessage("登录失败");
+        }
+        return baseBO;
     }
 
-
+    // @RequiresPermissions("user:show")
     @PostMapping("/vueData")
     @ResponseBody
     public VueData vueData() {
-        return    maJiangRecordService.vueData();
-
+        return maJiangRecordService.vueData();
     }
 
+    //  @RequiresPermissions("user:admin")
+    @PostMapping("/vueData2")
+    @ResponseBody
+    public VueData vueData2() {
+        return maJiangRecordService.vueData();
+    }
+
+
+    @PostMapping("/installDay")
+    @ResponseBody
+    public BaseBO installDay() {
+        Long id = maJiangRecordService.installDay();
+        System.out.println("id" + id);
+        BaseBO baseBO = new BaseBO();
+        baseBO.setStatus(1);
+        baseBO.setMessage("插入成功");
+        return baseBO;
+    }
+
+
+    @PostMapping("/getUser")
+    @ResponseBody
+    public List<LabelBO> getUser() {
+
+        return maJiangRecordService.getUser();
+    }
+
+
+    @PostMapping("/getTable")
+    @ResponseBody
+    public List<TableLableBO> getTable() {
+
+        return maJiangRecordService.getTable();
+    }
+
+
+    @PostMapping("/getTableData")
+    @ResponseBody
+    public JSONArray getTableData() {
+
+        return maJiangRecordService.getTableData();
+    }
 
 }
