@@ -2,28 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.majiang.statistics.dao.mapper.TrainDataMapper">
 
-    <resultMap id="trainDataMap"
-               type="com.majiang.statistics.dao.model.TrainData">
-        <result column="name" property="name"/>
-        <result column="smoking" property="smoking"/>
-        <result column="eat" property="eat"/>
-        <result column="phone" property="phone"/>
-        <result column="week" property="week"/>
-        <result column="bt"  property="bt"/>
-        <result column="not_in" property="notIn"/>
-        <result column="rent" property="rent"/>
-        <result column="girlfriend" property="girlfriend"/>
-        <result column="health" property="health"/>
-        <result column="no" property="no"/>
-        <result column="win"  property="win"/>
-    </resultMap>
+  <resultMap id="trainDataMap"
+    type="com.majiang.statistics.dao.model.TrainData">
+    <result column="name" property="name"/>
+    <result column="smoking" property="smoking"/>
+    <result column="eat" property="eat"/>
+    <result column="phone" property="phone"/>
+    <result column="week" property="week"/>
+    <result column="bt" property="bt"/>
+    <result column="not_in" property="notIn"/>
+    <result column="rent" property="rent"/>
+    <result column="girlfriend" property="girlfriend"/>
+    <result column="health" property="health"/>
+    <result column="no" property="no"/>
+    <result column="win" property="win"/>
+  </resultMap>
 
 
-
-
-
-
-    <insert id="insertTrainData">
+  <insert id="insertTrainData">
 INSERT INTO `mj`.`traindata`(`name`, `smoking`, `eat`, `phone`, `week`, `bt`, `not_in`, `rent`, `girlfriend`, `health`, `win`, `no`) VALUES
 (#{trainData.name,jdbcType=VARCHAR}, #{trainData.smoking,jdbcType=VARCHAR}, #{trainData.eat,jdbcType=VARCHAR}, #{trainData.phone,jdbcType=VARCHAR},  #{trainData.week,jdbcType=VARCHAR},
   #{trainData.bt,jdbcType=VARCHAR}, #{trainData.notIn,jdbcType=VARCHAR}, #{trainData.rent,jdbcType=VARCHAR},

@@ -1,7 +1,11 @@
 package com.majiang.statistics.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.majiang.statistics.BO.LabelBO;
+import com.majiang.statistics.BO.TableLableBO;
 import com.majiang.statistics.BO.VueData;
 import com.majiang.statistics.dao.model.TrainData;
+import java.util.List;
 import org.springframework.ui.Model;
 
 /**
@@ -25,4 +29,11 @@ public interface MaJiangRecordService {
 
     VueData vueData();
 
+    Long installDay();
+
+    List<LabelBO> getUser();
+
+    List<TableLableBO>   getTable();
+
+    JSONArray getTableData();
 }

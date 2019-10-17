@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.majiang.statistics.dao.mapper.MiddleMjHistoryMapper">
+
+  <resultMap id="mjHistoryMap"
+    type="com.majiang.statistics.dao.model.MjHistoryBO">
+    <result column="id" property="id"/>
+    <result column="red_envelope" property="redEnvelope"/>
+    <result column="rent" property="rent"/>
+    <result column="date_time" property="dateTime"/>
+    <result column="all_rent" property="allRent"/>
+  </resultMap>
+
+
+  <insert id="installDay"  keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO mj_history (  red_envelope, rent, date_time, all_rent)
+    VALUES
+   (#{mjHistoryBO.redEnvelope},#{mjHistoryBO.rent},#{mjHistoryBO.dateTime},#{mjHistoryBO.allRent})
+  </insert>
+
+</mapper>
